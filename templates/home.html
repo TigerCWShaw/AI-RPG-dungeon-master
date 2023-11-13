@@ -1,0 +1,286 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<script>
+    /*
+        INIT
+    */
+    let char_data = {{ data| tojson}};
+    let character_count = 1;
+
+    class Avatar {
+        constructor() {
+            this.id = character_count;
+            let obj = '<div id="avatar_box_' + character_count.toString() + '" class="avatar_box">\n';
+            obj += '<div class="char_info">\n';
+            obj += '<label for="name_' + character_count.toString() + '">Name:&nbsp</label>\n';
+            obj += '<input type="text" id="name_' + character_count.toString() + '" name="avatar_name" size="10"><br>\n';
+            obj += `<label for="race_` + character_count.toString() + `">Race:</label>
+                            <select name="race_dropdown" id="race_` + character_count.toString() + `">
+                                <option>Human</option>
+                                <option>Elf</option>
+                                <option>Dwarf</option>
+                            </select><br>\n`;
+            obj += `<label for="personality_` + character_count.toString() + `">Personality:</label>
+                            <select name="personality_dropdown" id="personality_` + character_count.toString() + `">
+                                <option>Lazy</option>
+                                <option>Curious</option>
+                                <option>Gruff</option>
+                            </select><br>\n`;
+            obj += `<label for="ability_` + character_count.toString() + `">Ability:</label>
+                            <select name="ability_dropdown" id="ability_` + character_count.toString() + `">
+                                <option>Lie Detection</option>
+                                <option>Hacking</option>
+                                <option>Master blacksmith</option>
+                            </select><br><br>\n`;
+            obj += '<button type="button" class="avatar_btn" id="avatar_btn_' + character_count.toString() + '">Create Character</button>';
+            obj += `<form class="player_prompt">
+                        <input type="text" class="type_prompt" placeholder="Type Your Message..." autofocus>
+                        <button class="submit" id="send_prompt_btn_` + character_count.toString() +`">Send</button>
+                    </form>\n`;
+            obj += '</div>';
+            obj += '</div>';
+
+            $(".avatar").append(obj);
+            character_count++;
+        }
+    }
+
+    $(function () {
+        $('#genre_btn').click(function () {
+            let genre = $('#genre_text').val();
+            // alert(genre);
+            set_genre(genre);
+        })
+    })
+
+    $(function () {
+        $("#new_avatar_btn").click(function () {
+            let av = new Avatar();
+        })
+    });
+
+    $(function () {
+        $(".avatar").on("click", ".avatar_btn", function () {
+            let id = $(this).attr('id').substring(11);
+            // alert(id);
+            let av_name = $("#name_" + id).val();
+            let race = $("#race_" + id  + " :selected").text();
+            let personality = $("#personality_" + id + " :selected").text();
+            let ability = $("#ability_" + id  + " :selected").text();
+            // alert(av_name);
+            // alert(race, personality, ability);
+            // alert(personality, ability);
+            // alert(ability);
+            get_avatar_img(id, av_name, race, personality, ability);
+        })
+    });
+
+    let av1 = new Avatar();
+    // let av2 = new Avatar();
+
+    function get_avatar_img(id, name, race, personality, ability) {
+        let data = {'name': name, 'race': race, 'personality': personality, 'ability': ability, 'id':id}
+        $.ajax({
+            type: "POST",
+            url: "/get_avatar_img",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: function (data, text) {
+                let url = data['url'];
+                // alert(url);
+                show_avatar_img(id, url);
+            },
+            error: function (request, status, error) {
+                console.log("Error");
+                console.log(request);
+                console.log(status);
+                console.log(error);
+            },
+        })
+    }
+
+    function show_avatar_img(id, url){
+        let img_div = '<div class="char_img">';
+        img_div += '<div class="avatar_img" id="avatar_img_' + id + '"><br><img src="' + url + '"width="128" height="128" alt="player avatar"></img></div>\n';
+        img_div += '</div>'
+        $("#avatar_box_" + id).append(img_div)
+    }
+
+    function set_genre(genre) {
+        let data = {'genre': genre}
+        $.ajax({
+            type: "PUT",
+            url: "/set_genre",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: function (data, text) {
+                let intro = data['intro'];
+                let obj = '<p class="story_response">' + intro + '</p>'
+                $(".responses").append(obj)
+            },
+            error: function (request, status, error) {
+                console.log("Error");
+                console.log(request);
+                console.log(status);
+                console.log(error);
+            },
+        })
+    }
+
+    // -------------------------------------------------------------------------
+
+    // to pretty print char_data as string to copy and paste for saving
+    function print_char_data() {
+        console.log(JSON.stringify(char_data, null, 3));
+    }
+
+
+    $(function () {
+        load_char_data()
+    });
+
+    function load_char_data() {
+        $("#spinner-div").hide()
+        //load images
+        generations_list = char_data["generations"]
+        if (generations_list.length > 0) {
+            show_generations(generations_list, true)
+        }
+    }
+
+    /*
+        HEADLINES
+    */
+
+    $(function () {
+        $("#radio_btn").click(function () {
+            console.log()
+            let genre = $('input[name="genre"]:checked').val()
+            get_features(genre)
+        })
+    });
+
+    function show_features(data) {
+        let features = data["features"]
+        $("#display_features").empty()
+        $.each(features, function (i, item) {
+            let new_feature_div = $("<input type='checkbox' name='feature_check'  id='" + item + "'><label for='feature_check'>" + item + "</label><br>")
+            $("#display_features").append(new_feature_div)
+        })
+    }
+
+    function get_features(genre) {
+        let data = { "genre": genre }
+        $.ajax({
+            type: "POST",
+            url: "/get_features",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+
+            data: JSON.stringify(data),
+            beforeSend: function () {
+                $("#spinner-div").show()
+            },
+            success: function (data, text) {
+                char_data = data
+                show_features(data)
+            },
+            error: function (request, status, error) {
+                console.log("Error");
+                console.log(request)
+                console.log(status)
+                console.log(error)
+            },
+            complete: function () {
+                $("#spinner-div").hide()
+            },
+        });
+    }
+
+    /*
+        IMAGE GENERATIONS
+    */
+
+    $(function () {
+        $("#get_images_btn").click(function () {
+            console.log("get_images_btn")
+            let selected_features = [];
+            $('input[name="feature_check"]:checked').each(function () {
+                selected_features.push($(this).attr('id'));
+            });
+            // let checkedBoxes = $('input[name="feature_check"]:checked').val()
+
+            console.log(selected_features)
+            // let features = char_data["features"]
+            get_images(selected_features)
+        })
+    });
+
+    function get_images(features) {
+        // console.log(headline)
+        // console.log(summary)
+        let data = { 'features': features }
+        $.ajax({
+            type: "POST",
+            url: "/get_images",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            beforeSend: function () {
+                $("#spinner-div").show()
+            },
+            success: function (data, text) {
+                console.log("get_images response")
+                console.log(data)
+                let prompt = data["prompt"]
+                let url = data["url"]
+
+                let new_generations_list = data
+                // for i in new_images:
+                $.each(new_generations_list, function (i, gen) {
+                    char_data["generations"].push(gen)
+                })
+
+                // char_data["generations"].push(data)
+                show_generations(char_data["generations"])
+
+            },
+            error: function (request, status, error) {
+                console.log("Error");
+                console.log(request)
+                console.log(status)
+                console.log(error)
+            },
+            complete: function () {
+                $("#spinner-div").hide()
+            },
+        })
+    }
+
+
+    function show_generations(generations_list) {
+        $("#gallery").empty()
+
+        $.each(generations_list, function (i, item) {
+            // console.log(item)
+            let id = item["id"]
+            let is_deleted = item["is_deleted"]
+
+            if (is_deleted != "true") {
+                let prompt = item["prompt"]
+                let url = item["url"]
+
+                let new_gen_div = $("<div id='" + id + "'><br><img src='" + url + "''></img></div>")
+
+
+                $("#gallery").append(new_gen_div)
+            }
+        })
+    }
+</script>
+
+{% endblock %}
