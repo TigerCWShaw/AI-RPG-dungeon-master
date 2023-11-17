@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template
 from flask import Response, request, jsonify
 from chatapp import ChatApp
+
 app = Flask(__name__)
 
 #for gpt
@@ -33,7 +34,7 @@ char_data = {
 def get_avatar_img():
     global char_data
     data = request.get_json()
-    print(data)
+    # print(data)
     char_data[data['id']] = {}
     char_data[data['id']]['race'] = data['race']
     char_data[data['id']]['name'] = data['name']
@@ -48,7 +49,7 @@ def get_avatar_img():
             Create a short description within 40 words for %s without mentioning character name in reply
             ''' %(data['name'], data['race'], data['personality'], data['ability'], data['name'])
     prompt = gpt.chat(msg)['content']
-    print(prompt)
+    # print(prompt)
     time.sleep(1)
     url = get_img("RPG avatar. " +(prompt), "256")
     # print("url:", url)
@@ -74,22 +75,22 @@ def set_genre():
     data = request.get_json()
     genre = data["genre"]
     intro = gpt.chat('Story Genre: ' + genre + ', create an intro to the world within 40 words')['content']
-    print(intro)
+    # print(intro)
     time.sleep(1)
 
     race = gpt.chat('Give me 5 different words for player race with no descriptions, use format 1. word1\n 2. word2\n')['content']
     gpt.messages = gpt.messages[:-2]
-    print(race)
+    # print(race)
     time.sleep(1)
 
     personality = gpt.chat('Give me 5 different words for player personality with no descriptions, use format 1. word1\n 2. word2\n')['content']
     gpt.messages = gpt.messages[:-2]
-    print(personality)
+    # print(personality)
     time.sleep(1)
 
     ability = gpt.chat('Give me 5 different words for player abilities with no descriptions, use format 1. word1\n 2. word2\n')['content']
     gpt.messages = gpt.messages[:-2]
-    print(ability)
+    # print(ability)
     time.sleep(1)
 
     race_list = parse_value(race)
@@ -111,10 +112,11 @@ def parse_value(response):
             value_list.append(item)
     return value_list
 
-@app.route('/player_request', methods=['GET', 'PUT'])
+@app.route('/player_request', methods=['GET', 'POST'])
 def player_request():
     data = request.get_json()
     prompt = data["prompt"]
+    # print('test', prompt)
     response = gpt.chat("Reply within 30 words. " + prompt)['content']
     # print(response)
 
@@ -125,11 +127,11 @@ def get_area_img():
     msg = 'Describe the scenery where the players are within 40 words'
     prompt = gpt.chat(msg)['content']
     gpt.messages = gpt.messages[:-2]
-    print(prompt)
+    # print(prompt)
     time.sleep(1)
-    
+
     url = get_img("Scenery, " + prompt, "512")
-    print("url:", url)
+    # print("url:", url)
 
     #send back the WHOLE array of data, so the client can redisplay it
     return jsonify({'url': url})
