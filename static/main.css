@@ -16,6 +16,14 @@ body {
     height: 100px;
 }
 
+.areas {
+    border-radius: 25px;
+    border: 2px solid #2154ad;
+    padding-left: 10px;
+    padding-right: 10px;
+    min-height: 400px;
+}
+
 .responses {
     border-radius: 25px;
     border: 2px solid #2154ad;
