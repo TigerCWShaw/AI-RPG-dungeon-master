@@ -20,7 +20,7 @@ from pathlib import Path
 
 genre = 'Fantasy'
 gpt = ChatApp()
-gpt.chat('You are a dungeon master')
+gpt.chat('You are a rpg dungeon master')
 
 char_data = {
     'genre': '',
@@ -40,17 +40,18 @@ def get_avatar_img():
     char_data[data['id']]['personality'] = data['personality']
     char_data[data['id']]['ability'] = data['ability']
 
-    msg = '''%s has the following aspects
+    msg = '''We are adding a new player,
+            name: %s,
             race: %s,
             personality: %s,
             ability: %s,
             Create a short description within 40 words for %s without mentioning character name in reply
             ''' %(data['name'], data['race'], data['personality'], data['ability'], data['name'])
     prompt = gpt.chat(msg)['content']
-    print(prompt)
+    # print(prompt)
 
     url = get_img("RPG avatar. " +(prompt))
-    print("url:", url)
+    # print("url:", url)
 
     #send back the WHOLE array of data, so the client can redisplay it
     return jsonify({'url': url})
@@ -72,11 +73,41 @@ def set_genre():
     global genre
     data = request.get_json()
     genre = data["genre"]
-    response = gpt.chat('Story Genre: ' + genre + ', reply an intro to the world within 70 words')['content']
-    print(response)
+    intro = gpt.chat('Story Genre: ' + genre + ', create an intro to the world within 40 words')['content']
+    # print(response)
 
-    return jsonify({'intro': response})
+    race = gpt.chat('Give me 5 choices for races each in one word, no need for description, use format 1. value \n 2. value\n')['content']
+    personality = gpt.chat('Give me 5 choices for personalities each in one word, no need for description, use format 1. value \n 2. value\n')['content']
+    ability = gpt.chat('Give me 5 choices for abilities each in one word, no need for description, use format 1. value \n 2. value\n')['content']
 
+    # print(race, personality, ability)
+    race_list = parse_value(race)
+    personality_list = parse_value(personality)
+    ability_list = parse_value(ability)
+
+    print(race_list, personality_list, ability_list, sep='\n')
+
+    return jsonify({'intro': intro, 'race': race_list, 'personality': personality_list, 'ability': ability_list})
+
+def parse_value(response):
+    split_list = response.splitlines()
+    value_list = []
+    for i, item in enumerate(split_list):
+        item = item.strip()
+        if item != "":
+            item = item[item.index(".") + 1:]
+            item = item.strip()
+            value_list.append(item)
+    return value_list
+
+@app.route('/player_request', methods=['GET', 'PUT'])
+def player_request():
+    data = request.get_json()
+    prompt = data["prompt"]
+    response = gpt.chat("Reply within 30 words. " + prompt)['content']
+    # print(response)
+
+    return jsonify({'response': response})
 
 # --------------------------------------------------------------
 

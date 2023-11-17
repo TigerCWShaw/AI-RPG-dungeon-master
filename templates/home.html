@@ -7,7 +7,11 @@
         INIT
     */
     let char_data = {{ data| tojson}};
+
     let character_count = 1;
+    let race_list = new Set(["Human", "Elf", "Dwarf"]);
+    let personality_list = new Set(["Lazy", "Curious", "Gruff"]);
+    let ability_list = new Set(["Lie Detection", "Hacking", "Master blacksmith"])
 
     class Avatar {
         constructor() {
@@ -34,11 +38,10 @@
                                 <option>Hacking</option>
                                 <option>Master blacksmith</option>
                             </select><br><br>\n`;
-            obj += '<button type="button" class="avatar_btn" id="avatar_btn_' + character_count.toString() + '">Create Character</button>';
-            obj += `<form class="player_prompt">
-                        <input type="text" class="type_prompt" placeholder="Type Your Message..." autofocus>
-                        <button class="submit" id="send_prompt_btn_` + character_count.toString() +`">Send</button>
-                    </form>\n`;
+            obj += '<button type="button" class="avatar_btn" id="avatar_btn_' + character_count.toString() + '">Create Character</button><br>\n';
+            obj += `<label for="input_prompt_` + character_count.toString() + `"></label>
+                    <input type="text" id="input_prompt_` + character_count.toString() + `" placeholder="Type Your Message..." autofocus>
+                    <button type="submit" class="prompt_btn" id="send_prompt_` + character_count.toString() + `">Send</button>\n`;
             obj += '</div>';
             obj += '</div>';
 
@@ -66,22 +69,38 @@
             let id = $(this).attr('id').substring(11);
             // alert(id);
             let av_name = $("#name_" + id).val();
-            let race = $("#race_" + id  + " :selected").text();
+            let race = $("#race_" + id + " :selected").text();
             let personality = $("#personality_" + id + " :selected").text();
-            let ability = $("#ability_" + id  + " :selected").text();
+            let ability = $("#ability_" + id + " :selected").text();
             // alert(av_name);
             // alert(race, personality, ability);
             // alert(personality, ability);
             // alert(ability);
             get_avatar_img(id, av_name, race, personality, ability);
+            $(this).hide();
         })
     });
+
+    $(function () {
+        $(".avatar").on("focus", ".prompt_btn", function () {
+            let id = $(this).attr('id').substring(12);
+            // alert(id);
+            let av_name = $("#name_" + id).val();
+            let prompt = $("#input_prompt_" + id).val();
+            prompt = av_name + ": " + prompt;
+            // alert(prompt);
+            let obj = '<p class="story_response">' + prompt + '</p>'
+            $(".responses").append(obj)
+            player_request(prompt)
+            $("#input_prompt_" + id).val('');
+        })
+    })
 
     let av1 = new Avatar();
     // let av2 = new Avatar();
 
     function get_avatar_img(id, name, race, personality, ability) {
-        let data = {'name': name, 'race': race, 'personality': personality, 'ability': ability, 'id':id}
+        let data = { 'name': name, 'race': race, 'personality': personality, 'ability': ability, 'id': id }
         $.ajax({
             type: "POST",
             url: "/get_avatar_img",
@@ -102,7 +121,7 @@
         })
     }
 
-    function show_avatar_img(id, url){
+    function show_avatar_img(id, url) {
         let img_div = '<div class="char_img">';
         img_div += '<div class="avatar_img" id="avatar_img_' + id + '"><br><img src="' + url + '"width="128" height="128" alt="player avatar"></img></div>\n';
         img_div += '</div>'
@@ -110,7 +129,7 @@
     }
 
     function set_genre(genre) {
-        let data = {'genre': genre}
+        let data = { 'genre': genre };
         $.ajax({
             type: "PUT",
             url: "/set_genre",
@@ -119,7 +138,77 @@
             data: JSON.stringify(data),
             success: function (data, text) {
                 let intro = data['intro'];
+                let race = data['race'];
+                // alert(typeof race)
+                let personality = data['personality']
+                let ability = data['ability']
+
+                // for (let i = 0; i < 5; i++) {
+                //     race_list.add(race[i]);
+                //     personality_list.add(personality[i]);
+                //     ability_list.add(ability[i]);
+                // }
+                $.each(race, function(i, item) {
+                    alert(item);
+                    race_list.add(item);
+                })
+                $.each(personality, function(i, item) {
+                    personality_list.add(item);
+                })
+                $.each(ability, function(i, item) {
+                    ability_list.add(item);
+                })
+
+                for (let i = 1; i < character_count; i++) {
+                    $("#race_" + i.toString()).empty();
+                    $("#personality_" + i.toString()).empty();
+                    $("#ability_" + i.toString()).empty();
+
+                    let new_option = "";
+
+                    $.each(race_list, function (j, item) {
+                        new_option += "<option>" + item + "</option>";
+                    })
+                    // alert(new_option)
+                    $("#race_" + i.toString()).append(new_option);
+
+
+                    new_option = "";
+                    $.each(personality_list, function (j, item) {
+                        new_option += "<option>" + item + "</option>";
+                    })
+                    $("#personality_" + i.toString()).append(new_option);
+
+                    new_option = "";
+                    $.each(ability_list, function (j, item) {
+                        new_option += "<option>" + item + "</option>";
+                    })
+                    $("#ability_" + i.toString()).append(new_option);
+                }
+
                 let obj = '<p class="story_response">' + intro + '</p>'
+                $(".responses").append(obj)
+            },
+            error: function (request, status, error) {
+                console.log("Error");
+                console.log(request);
+                console.log(status);
+                console.log(error);
+            },
+        })
+    }
+
+    function player_request(prompt) {
+        let data = { "prompt": prompt }
+        $.ajax({
+            type: "PUT",
+            url: "/player_request",
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify(data),
+            success: function (data, text) {
+                let res = data['response'];
+                let obj = '<p class="story_response">' + res + '</p>'
                 $(".responses").append(obj)
             },
             error: function (request, status, error) {
