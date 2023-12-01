@@ -1,0 +1,60 @@
+body {
+    font-family: Georgia, serif;
+    background-image: url("pexels-veeterzy-38136.jpg");
+    background-size: cover;
+    background-color: #cccccc;
+    color: white;
+}
+
+.container {
+    position: relative;
+}
+
+h1 {
+    font-size: 72px;
+}
+
+.center {
+    /* margin: 0; */
+    /* position: absolute; */
+    /* margin-left: auto;
+    margin-right: auto; */
+    text-align: center
+    /* -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
+}
+
+.play_btn {
+    background-color: rgb(187, 13, 13);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    /* text-decoration: none; */
+    display: inline-block;
+    font-size: 32px;
+    border-radius: 30%;
+}
+
+.description {
+    background-color: bisque;
+    margin: auto;
+    width: 50%;
+    padding: 10px;
+    color: black;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(105, 105, 105);
+    color: white;
+    text-align: center;
+}
+
+.nav_bar {
+    background-color: white;
+    width: 50px;
+}

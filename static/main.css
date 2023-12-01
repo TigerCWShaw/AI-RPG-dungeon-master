@@ -1,6 +1,24 @@
 body {
     width: 100%;
     float: left;
+    font-family: Georgia, serif;
+    background-image: url("pexels-veeterzy-38136.jpg");
+    background-size: cover;
+    background-color: #cccccc;
+    color: white;
+}
+
+h2 {
+    text-align: center;
+}
+
+button {
+    border-radius: 25px;
+}
+
+.nav_bar {
+    background-color: white;
+    width: 50px;
 }
 
 .avatar {
@@ -16,20 +34,14 @@ body {
     height: 100px;
 }
 
-.areas {
-    border-radius: 25px;
-    border: 2px solid #2154ad;
-    padding-left: 10px;
-    padding-right: 10px;
-    min-height: 400px;
-}
-
 .responses {
     border-radius: 25px;
     border: 2px solid #2154ad;
     padding-left: 10px;
     padding-right: 10px;
     min-height: 400px;
+    background-color: bisque;
+    color: black;
 }
 
 .char_img, .char_info{
@@ -78,4 +90,16 @@ body {
     border-radius: 25px;
     border: 2px solid #2154ad;
     padding: 25px;
+    background-color: bisque;
+    color: black;
+}
+
+.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: rgb(105, 105, 105);
+    color: white;
+    text-align: center;
 }

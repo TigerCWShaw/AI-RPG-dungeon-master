@@ -138,15 +138,19 @@ def get_area_img():
 
 # --------------------------------------------------------------
 
+
+@app.route('/play/')
+def play():
+    return render_template('home.html', data=char_data)
+
 @app.route('/')
 def home():
-    # you can pass in an existing article or a blank one.
-    return render_template('home.html', data=char_data)
+    return render_template('index.html', data=char_data)
 
 
 if __name__ == '__main__':
     # app.run(debug = True, port = 4000)
-    app.run(debug = False)
+    app.run(debug = True)
 
 
 

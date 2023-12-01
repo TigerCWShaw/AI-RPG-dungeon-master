@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='index.css')}}">
+
+    <title>AI RPG Dungeon Master</title>
+</head>
+
+<body>
+    <nav class="nav_bar">
+        <img src="{{url_for('static', filename='noun-dragon-1646673.png')}}" alt="icon" width="50" height="50"
+            onclick="location.href='{{ url_for('home')}}'">
+    </nav>
+    <br><br>
+
+    <div class="center">
+        <h1>AI Dunguen Master</h1>
+    </div>
+
+    <div class="container">
+        <div class="center">
+            <a class="play_btn" href="{{ url_for('play')}}">Play</a><br><br>
+        </div>
+    </div>
+    <br><br>
+    <div class="description">
+        <p>
+            AI Dungeun master is a game that uses chatGPT to create a D&D like experience.
+            We use chatGPT and player choices to create a unique story. Players can create
+            their own stories and have a unique experience for each playthrough
+        </p>
+    </div>
+
+    <div class="footer">
+        dragon by BGBOXXX Design from <a href="https://thenounproject.com/browse/icons/term/dragon/" target="_blank"
+            title="dragon Icons">Noun Project</a> (CC BY 3.0)
+    </div>
+</body>
+
+</html>
