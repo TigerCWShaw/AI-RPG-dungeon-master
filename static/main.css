@@ -6,6 +6,7 @@ body {
     background-size: cover;
     background-color: #cccccc;
     color: white;
+    overflow: hidden;
 }
 
 h2 {
@@ -14,6 +15,7 @@ h2 {
 
 button {
     border-radius: 25px;
+    font-family: Georgia, serif;
 }
 
 .nav_bar {
@@ -42,6 +44,7 @@ button {
     min-height: 400px;
     background-color: bisque;
     color: black;
+    overflow: auto;
 }
 
 .char_img, .char_info{
@@ -102,4 +105,13 @@ button {
     background-color: rgb(105, 105, 105);
     color: white;
     text-align: center;
+}
+
+.center {
+    text-align: center;
+}
+
+.new_map_btn,
+.new_avatar_btn {
+    font-size: 20px;
 }

@@ -19,7 +19,7 @@ h1 {
     /* position: absolute; */
     /* margin-left: auto;
     margin-right: auto; */
-    text-align: center
+    text-align: center;
     /* -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%); */
 }
@@ -42,6 +42,7 @@ h1 {
     width: 50%;
     padding: 10px;
     color: black;
+    overflow: auto;
 }
 
 .footer {
