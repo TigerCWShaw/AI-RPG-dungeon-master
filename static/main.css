@@ -44,7 +44,7 @@ button {
     min-height: 400px;
     background-color: bisque;
     color: black;
-    overflow: auto;
+    overflow: scroll;
 }
 
 .char_img, .char_info{
