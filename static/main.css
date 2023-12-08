@@ -34,9 +34,38 @@ button {
     font-family: Georgia, serif;
 }
 
-.nav_bar {
+/* .nav_bar {
     background-color: white;
     width: 50px;
+} */
+
+ul {
+    list-style-type: none;
+    position: fixed;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    background-color: gainsboro;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: black;
+    font-size: 24px;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: red;
+    color: white;
 }
 
 .avatar {
@@ -67,7 +96,8 @@ button {
     overflow-y: auto;
 }
 
-.char_img, .char_info{
+.char_img,
+.char_info {
     display: inline-block;
     margin: auto;
 }
@@ -109,7 +139,7 @@ button {
 }
 
 
-.avatar_box{
+.avatar_box {
     border-radius: 25px;
     /* border: 2px solid black; */
     padding: 10px;
@@ -134,4 +164,14 @@ button {
 .new_map_btn,
 .new_avatar_btn {
     font-size: 20px;
+}
+
+.status {
+    animation: blinker 2.5s linear infinite;
+}
+
+@keyframes blinker {
+    50% {
+        opacity: 0;
+    }
 }

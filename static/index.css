@@ -56,7 +56,36 @@ h1 {
     text-align: center;
 }
 
-.nav_bar {
+/* .nav_bar {
     background-color: white;
     width: 50px;
+} */
+
+ul {
+    list-style-type: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: gainsboro;
+}
+
+li {
+    float: left;
+}
+
+li a {
+    display: block;
+    color: black;
+    font-size: 24px;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+li a:hover:not(.active) {
+    background-color: red;
+    color: white
 }

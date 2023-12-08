@@ -135,8 +135,12 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
+            beforeSend: function() {
+                $(".status").show();
+            },
             success: function (data, text) {
                 let url = data['url'];
+                $(".status").hide();
                 // alert(url);
                 show_avatar_img(id, url);
             },
@@ -164,13 +168,15 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
+            beforeSend: function() {
+                $(".status").show();
+            },
             success: function (data, text) {
                 let intro = data['intro'];
                 let race = data['race'];
                 let genre = data['genre'];
-
+                $(".status").hide();
                 console.log(genre);
-
                 let personality = data['personality']
                 let ability = data['ability']
 
@@ -229,9 +235,13 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
+            beforeSend: function() {
+                $(".status").show();
+            },
             success: function (data, text) {
                 let res = data['response'];
-                let obj = '<p class="story_response_ai">' + res + '</p>'
+                let obj = '<p class="story_response_ai">' + res + '</p>';
+                $(".status").hide();
                 $(".responses").append(obj);
                 $(".responses").animate({ scrollTop: $(".responses").height() }, "slow");
             },
@@ -253,7 +263,11 @@
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
+            beforeSend: function() {
+                $(".status").show();
+            },
             success: function (data, text) {
+                $(".status").hide();
                 let url = data['url'];
                 // alert(url);
                 show_area_img(url);
