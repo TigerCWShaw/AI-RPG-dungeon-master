@@ -24,3 +24,6 @@ class ChatApp:
             return self.chat(message)
         else:
             return self.chat(message + " with emphasis on " + emphasis)
+
+    def clear(self):
+        self.messages = []

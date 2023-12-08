@@ -20,8 +20,9 @@ from base64 import b64decode
 from pathlib import Path
 
 genre = 'Fantasy'
+
 gpt = ChatApp()
-gpt.chat('You are a rpg dungeon master')
+gpt.chat('You are a rpg dungeon master, tell the story in dice format')
 
 char_data = {
     'genre': '',
@@ -74,24 +75,35 @@ def set_genre():
     global genre
     data = request.get_json()
     genre = data["genre"]
-    intro = gpt.chat('Story Genre: ' + genre + ', create an intro to the world within 40 words')['content']
-    # print(intro)
-    time.sleep(1)
 
-    race = gpt.chat('Give me 5 different words for player race with no descriptions, use format 1. word1\n 2. word2\n')['content']
+    return jsonify({'response': 'genre set successfully'})
+
+
+@app.route('/get_genre', methods=['GET', 'PUT'])
+def get_genre():
+    global genre, gpt
+    data = request.get_json()
+    # genre = data["genre"]
+    gpt.clear()
+    gpt.chat('You are a rpg dungeon master, tell the story in dice format')
+    intro = gpt.chat('Story Genre: ' + genre + ', create an intro within 40 words')['content']
+    # print(intro)
+    # time.sleep(1)
+
+    race = gpt.chat('Give me 5 different singular words for player race with no descriptions, use format 1. word1\n 2. word2\n')['content']
     gpt.messages = gpt.messages[:-2]
     # print(race)
-    time.sleep(1)
+    # time.sleep(1)
 
-    personality = gpt.chat('Give me 5 different words for player personality with no descriptions, use format 1. word1\n 2. word2\n')['content']
+    personality = gpt.chat('Give me 5 different singular words for player personality with no descriptions, use format 1. word1\n 2. word2\n')['content']
     gpt.messages = gpt.messages[:-2]
     # print(personality)
-    time.sleep(1)
+    # time.sleep(1)
 
-    ability = gpt.chat('Give me 5 different words for player abilities with no descriptions, use format 1. word1\n 2. word2\n')['content']
+    ability = gpt.chat('Give me 5 different singular words for player abilities with no descriptions, use format 1. word1\n 2. word2\n')['content']
     gpt.messages = gpt.messages[:-2]
     # print(ability)
-    time.sleep(1)
+    # time.sleep(1)
 
     race_list = parse_value(race)
     personality_list = parse_value(personality)
@@ -99,7 +111,7 @@ def set_genre():
 
     # print(race_list, personality_list, ability_list, sep='\n')
 
-    return jsonify({'intro': intro, 'race': race_list, 'personality': personality_list, 'ability': ability_list})
+    return jsonify({'genre': genre,'intro': intro, 'race': race_list, 'personality': personality_list, 'ability': ability_list})
 
 def parse_value(response):
     split_list = response.splitlines()
@@ -141,7 +153,11 @@ def get_area_img():
 
 @app.route('/play/')
 def play():
-    return render_template('home.html', data=char_data)
+    return render_template('play.html', data=char_data)
+
+@app.route('/genre/')
+def story_genre():
+    return render_template('genre.html', data=char_data)
 
 @app.route('/')
 def home():

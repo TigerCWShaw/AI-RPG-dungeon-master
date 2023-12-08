@@ -1,9 +1,16 @@
 body {
     font-family: Georgia, serif;
-    background-image: url("pexels-veeterzy-38136.jpg");
+    /* background-image: url("pexels-veeterzy-38136.jpg"); */
     background-size: cover;
-    background-color: #cccccc;
+    background-color: black;
     color: white;
+}
+
+.text_genre {
+    width: 300px;
+    height: 50px;
+    font-family: Georgia, serif;
+    font-size: 40px;
 }
 
 .container {

@@ -28,12 +28,12 @@
             obj += `<label for="ability_` + character_count.toString() + `">Ability:</label>
                             <select name="ability_dropdown" id="ability_` + character_count.toString() + `">
                             </select><br><br>\n`;
-            obj += '<button type="button" class="avatar_btn" id="avatar_btn_' + character_count.toString() + '">Create Character</button><br><br>\n';
+            obj += '<button type="button" class="avatar_btn" id="avatar_btn_' + character_count.toString() + '">Create Character</button>\n';
             obj += `<label for="input_prompt_` + character_count.toString() + `"></label>
-                    <input type="text" id="input_prompt_` + character_count.toString() + `" placeholder="Type Your Message..." autofocus>
+                    <input type="text" id="input_prompt_` + character_count.toString() + `" placeholder="Type player request..." autofocus>
                     <button type="submit" class="prompt_btn" id="send_prompt_` + character_count.toString() + `">Send</button>\n`;
             obj += '</div>';
-            obj += '</div>';
+            obj += '</div><br>';
 
             $(".avatar").append(obj);
 
@@ -60,17 +60,22 @@
             }
             $("#ability_" + character_count.toString()).append(new_option);
 
+            $("#input_prompt_" + character_count.toString()).hide();
+            $("#send_prompt_" + character_count.toString()).hide();
             character_count++;
         }
     }
 
-    $(function () {
-        $('#genre_btn').click(function () {
-            let genre = $('#genre_text').val();
-            // alert(genre);
-            set_genre(genre);
-        })
-    })
+    // $(function () {
+    //     $('#genre_btn').click(function () {
+    //         let genre = $('#genre_text').val();
+    //         // alert(genre);
+    //         get_genre(genre);
+    //     })
+    // })
+
+    // init and start story
+    get_genre();
 
     $(function () {
         $("#new_avatar_btn").click(function () {
@@ -92,6 +97,8 @@
             // alert(ability);
             get_avatar_img(id, av_name, race, personality, ability);
             $(this).hide();
+            $("#input_prompt_" + id.toString()).show();
+            $("#send_prompt_" + id.toString()).show();
         })
     });
 
@@ -103,8 +110,9 @@
             let prompt = $("#input_prompt_" + id).val();
             prompt = av_name + ": " + prompt;
             // alert(prompt);
-            let obj = '<p class="story_response">' + prompt + '</p>'
+            let obj = '<p class="story_response_player">' + prompt + '</p>'
             $(".responses").append(obj)
+            $(".responses").animate({ scrollTop: $(".responses").height() }, "slow");
             player_request(prompt)
             $("#input_prompt_" + id).val('');
         })
@@ -143,23 +151,26 @@
 
     function show_avatar_img(id, url) {
         let img_div = '<div class="char_img">';
-        img_div += '<div class="avatar_img" id="avatar_img_' + id + '"><br><img src="' + url + '"width="128" height="128" alt="player avatar"></img></div>\n';
+        img_div += '<div class="avatar_img" id="avatar_img_' + id + '"><img src="' + url + '"width="128" height="128" alt="player avatar"></img></div>\n';
         img_div += '</div>';
         $("#avatar_box_" + id).append(img_div);
     }
 
-    function set_genre(genre) {
-        let data = { 'genre': genre };
+    function get_genre() {
+        let data = {'request': 'genre'};
         $.ajax({
             type: "PUT",
-            url: "/set_genre",
+            url: "/get_genre",
             dataType: "json",
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(data),
             success: function (data, text) {
                 let intro = data['intro'];
                 let race = data['race'];
-                // alert(typeof race)
+                let genre = data['genre'];
+
+                console.log(genre);
+
                 let personality = data['personality']
                 let ability = data['ability']
 
@@ -198,7 +209,7 @@
                     $("#ability_" + i.toString()).append(new_option);
                 }
 
-                let obj = '<p class="story_response">' + intro + '</p>'
+                let obj = '<p class="story_response_ai">' + intro + '</p>'
                 $(".responses").append(obj)
             },
             error: function (request, status, error) {
@@ -220,8 +231,9 @@
             data: JSON.stringify(data),
             success: function (data, text) {
                 let res = data['response'];
-                let obj = '<p class="story_response">' + res + '</p>'
-                $(".responses").append(obj)
+                let obj = '<p class="story_response_ai">' + res + '</p>'
+                $(".responses").append(obj);
+                $(".responses").animate({ scrollTop: $(".responses").height() }, "slow");
             },
             error: function (request, status, error) {
                 console.log("Error");
@@ -257,7 +269,9 @@
 
     function show_area_img(url) {
         let img_div = '<div class="area_img" id="area_img_' + area_img_count.toString() + '"><br><img src="' + url + '"width="512" height="512" alt="area img"></img></div>\n';
-        $(".areas").append(img_div);
+        // $(".areas").append(img_div);
+        $(".responses").append(img_div);
+        $(".responses").animate({ scrollTop: $(".responses").height() }, "slow");
     }
 
     // -------------------------------------------------------------------------

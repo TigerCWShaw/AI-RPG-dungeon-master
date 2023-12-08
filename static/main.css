@@ -2,11 +2,27 @@ body {
     width: 100%;
     float: left;
     font-family: Georgia, serif;
-    background-image: url("pexels-veeterzy-38136.jpg");
+    /* background-image: url("pexels-veeterzy-38136.jpg"); */
     background-size: cover;
-    background-color: #cccccc;
+    background-color: black;
     color: white;
-    overflow: hidden;
+    overflow-y: auto;
+}
+
+.story_response_player {
+    background-color: gainsboro;
+    color: black;
+    border-radius: 25px;
+    padding: 10px;
+    font-size: 20px;
+}
+
+.story_response_ai {
+    background-color: rgb(50, 50, 200);
+    color: white;
+    border-radius: 25px;
+    padding: 10px;
+    font-size: 20px;
 }
 
 h2 {
@@ -24,27 +40,31 @@ button {
 }
 
 .avatar {
-    width: 28%;
+    width: 25%;
     float: left;
     height: 100px;
 }
 
-.response,
-.world {
-    width: 36%;
+.space {
+    width: 5%;
+    float: left;
+}
+
+.response {
+    width: 40%;
     float: left;
     height: 100px;
 }
 
 .responses {
     border-radius: 25px;
-    border: 2px solid #2154ad;
+    /* border: 2px solid whitesmoke; */
     padding-left: 10px;
     padding-right: 10px;
-    height: 400px;
-    background-color: bisque;
+    height: 500px;
+    background-color: whitesmoke;
     color: black;
-    overflow: scroll;
+    overflow-y: auto;
 }
 
 .char_img, .char_info{
@@ -91,9 +111,9 @@ button {
 
 .avatar_box{
     border-radius: 25px;
-    border: 2px solid #2154ad;
-    padding: 25px;
-    background-color: bisque;
+    /* border: 2px solid black; */
+    padding: 10px;
+    background-color: whitesmoke;
     color: black;
 }
 

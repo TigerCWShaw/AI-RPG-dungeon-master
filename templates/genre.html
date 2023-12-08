@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="http://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <link rel="stylesheet" href="{{url_for('static', filename='genre.css')}}">
+
+    <title>AI RPG Dungeon Master</title>
+</head>
+
+<body>
+    <script>
+        $(function () {
+            $(".play_btn").click(function () {
+                let genre = $("#input_genre").val();
+                if (genre != "") {
+                    set_genre(genre);
+                    window.location.href = '{{ url_for('play')}}';
+                } else {
+                    $("#input_genre").attr('placeholder', 'Enter genre first');
+                }
+            })
+        });
+
+        function set_genre(genre) {
+            let data = { 'genre': genre };
+            $.ajax({
+                type: "PUT",
+                url: "/set_genre",
+                dataType: "json",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify(data),
+                success: function (response, text) {
+                    console.log(response)
+                },
+                error: function (request, status, error) {
+                    console.log(request);
+                    console.log(status);
+                    console.log(error);
+                },
+            })
+        }
+
+    </script>
+
+    <nav class="nav_bar">
+        <img src="{{url_for('static', filename='noun-dragon-1646673.png')}}" alt="icon" width="50" height="50"
+            onclick="location.href='{{ url_for('home')}}'">
+    </nav>
+    <br><br>
+
+    <div class="center">
+        <label for="input_genre">
+            <h1>Pick a genre for your story</h1>
+        </label>
+        <input type="text" class="text_genre" id="input_genre">
+    </div>
+    <br><br>
+
+    <div class="container">
+        <div class="center">
+            <a class="play_btn"><b>NEXT</b></a>
+        </div>
+    </div>
+
+    <div class="footer">
+        dragon by BGBOXXX Design from <a href="https://thenounproject.com/browse/icons/term/dragon/" target="_blank"
+            title="dragon Icons">Noun Project</a> (CC BY 3.0)
+    </div>
+</body>
+
+</html>
