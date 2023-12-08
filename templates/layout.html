@@ -24,8 +24,8 @@
 
 <body>
   <ul class="nav_bar">
-    <li><img src="{{url_for('static', filename='noun-dragon-1646673.png')}}" alt="icon" class="icon" width="50" height="50"
-      onclick="location.href='{{ url_for('home')}}'"></li>
+    <li><img src="{{url_for('static', filename='noun-dragon-1646673.png')}}" alt="icon" class="icon" width="50"
+        height="50" onclick="location.href='{{ url_for('home')}}'"></li>
     <li><a href="{{ url_for('story_genre')}}"><b>Back</b></a></li>
   </ul>
   <br><br><br><br>
@@ -46,7 +46,9 @@
     </div>
     <div class="responses"></div>
     <br>
-    <div class="center"><div class="status">Loading...</div></div>
+    <div class="center">
+      <div class="status"><b>Loading...</b></div>
+    </div>
   </div>
 
   <!-- <div class="space"><br></div> -->

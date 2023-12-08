@@ -2,8 +2,8 @@ body {
     width: 100%;
     float: left;
     font-family: Georgia, serif;
-    /* background-image: url("pexels-veeterzy-38136.jpg"); */
-    background-size: cover;
+    background-image: url("branch.png");
+    background-size: auto;
     background-color: black;
     color: white;
     overflow-y: auto;
@@ -168,6 +168,9 @@ li a:hover:not(.active) {
 
 .status {
     animation: blinker 2.5s linear infinite;
+    font-size: 20px;
+    color: lightgoldenrodyellow;
+    right: 0%;
 }
 
 @keyframes blinker {
